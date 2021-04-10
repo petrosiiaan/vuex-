@@ -1,10 +1,29 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div id="app">
+    <h1>Posts: {{ postsCount }}</h1>
+    <PostForm />
+    <div class="post" v-for="post in allPosts" :key="post.id">
+      <h2>{{ post.title }}</h2>
+      <p>{{ post.body }}</p>
+    </div>
   </div>
-  <router-view/>
 </template>
+
+<script>
+import PostForm from './components/PostForm'
+import {mapGetters, mapActions} from 'vuex'
+export default {
+  computed: mapGetters(['allPosts', 'postsCount']),
+  methods: mapActions(['getBackend']),
+  async mounted() {
+    // this.$store.dispatch('getBackend')
+    this.getBackend(10)
+  },
+  components: {
+    PostForm
+  }
+}
+</script>
 
 <style>
 #app {
@@ -13,18 +32,17 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  margin: 60px auto;
 }
 
-#nav {
-  padding: 30px;
-}
+.post {
+  margin-top: 50px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  display: flex;
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>
